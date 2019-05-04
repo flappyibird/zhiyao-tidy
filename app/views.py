@@ -126,26 +126,30 @@ def incubatorDeatil(request,incubatorno):
     # info=combineDict(initalInfo,monitorInfo)
     print(info)
 
-    #处理监控信息
+    # 处理监控信息
     incubatorsUsing = models.Incubatorusing.objects.filter(incubator_incuno=incubatorno).order_by('initializetime')
     iuno = incubatorsUsing[len(incubatorsUsing) - 1].iuno  # 获取这个培养箱的使用编号的最新的那个编号
     print(iuno)
-    monitorDatas = models.Monitorinform.objects.filter(incubatorusing_iuno=iuno).order_by('mtime')
-    time=[]
-    temperature=[]
-    humidity=[]
-    pressure=[]
-    lightIntensity=[]
+    # monitorDatas = models.Monitorinform.objects.filter(incubatorusing_iuno=iuno).order_by('mtime')
+    monitorDatas = models.Monitorinform.objects.all().order_by('-mtime')
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(monitorDatas)
+    time = []
+    temperature = []
+    humidity = []
+    pressure = []
+    lightIntensity = []
     for data in monitorDatas:
         time.append(str(data.mtime)[:16])
         temperature.append(data.mtemperature)
         humidity.append(data.mhumidity)
         pressure.append(data.mpressure)
         lightIntensity.append(data.mlightlntensity)
-    monitorDatas2 = {"Mtimes":json.dumps(time[:10]),"Mtemperatures":temperature[:10],"Mhumiditys":humidity[:10],"Mpressures":pressure[:10],"MlightIntensitys":lightIntensity[:10]}
+    monitorDatas2 = {"Mtimes": json.dumps(time[:10]), "Mtemperatures": temperature[:10], "Mhumiditys": humidity[:10],
+                     "Mpressures": pressure[:10], "MlightIntensitys": lightIntensity[:10]}
     print(time)
     info.update(monitorDatas2)
-    return render(request,"incubatorDetail3.html",info)
+    return render(request, "incubatorDetail3.html", info)
 
 
 #获取监控信息返回给调用函数
@@ -401,7 +405,7 @@ def returnImage(request):
     dir='realtime_images'
     lists = os.listdir(dir)  # 列出目录的下所有文件和文件夹保存到lists
     print(lists)
-    lists.sort(key=lambda fn: os.path.getmtime(dir + "\\" + fn))  # 按时间排序
+    lists.sort(key=lambda fn: os.path.getmtime(dir + "/" + fn))  # 按时间排序
     file_new = os.path.join(dir, lists[-1])  # 获取最新的文件保存到file_new
     print(file_new)
     f=open(file_new,'rb')

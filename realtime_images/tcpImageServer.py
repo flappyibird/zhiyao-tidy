@@ -67,7 +67,7 @@ while True:
     # t=2.2&l=5&p=6&h=2.2
     # l的值有三种格式：99999:开灯 99998:关灯 0-99997:光照强度
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(('', 8088))
+    s.bind(('', 8082))
     s.listen(50)
     print("Server Starting")
     conn, addr = s.accept()
